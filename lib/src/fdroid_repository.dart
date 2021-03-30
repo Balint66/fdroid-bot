@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:frdiod_server_bot/frdiod_server_bot.dart';
+import 'fdroid.dart';
+import 'github_api.dart';
 import 'package:git/git.dart';
 
 class FDroidRepository {

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
-import 'package:frdiod_server_bot/src/jwt_gen.dart';
+import 'jwt_gen.dart';
 import 'package:git/git.dart';
 
 import 'auth_token_gen.dart';
