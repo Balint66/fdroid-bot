@@ -1,0 +1,14 @@
+name: frdiod_server_bot
+description: A starting point for Dart libraries or applications.
+# version: 1.0.0
+# homepage: https://www.example.com
+
+environment:
+  sdk: '>=2.10.0 <3.0.0'
+
+dependencies:
+  git: ^1.1.0
+  dart_jsonwebtoken: ^1.5.1
+
+dev_dependencies:
+  pedantic: ^1.9.0
