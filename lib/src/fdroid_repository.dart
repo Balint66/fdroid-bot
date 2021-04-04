@@ -79,13 +79,12 @@ class FDroidRepository {
         {
           print('loop');
         }
-        await Future.delayed(Duration(minutes: 30));
         var downloaded = await getLatestApk();
         if (downloaded) {
           await updateRepository();
           await pushUpdate();
         }
-
+        await Future.delayed(Duration(minutes: 30));
         return true;
       });
 }
