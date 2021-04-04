@@ -85,7 +85,7 @@ class GithubAPI {
     }
     var request = await _client.getUrl(uri);
     var response = await request.close();
-    var body = await response.fold(<int>[], (List<int> previous, element) {
+    var body = await response.fold<List<int>>(<int>[], (List<int> previous, List<int> element) {
       previous.addAll(element);
       return previous;
     });
