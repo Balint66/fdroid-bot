@@ -12,18 +12,22 @@ class GithubAPI {
   final AuthTokenGen _authGen;
   final String repository;
   final String user;
+  final bool verbose;
 
   GithubAPI._(this.repository, this.user, String issuer, RSAPrivateKey key,
-      HttpClient client)
+      HttpClient client, this.verbose)
       : _authGen = AuthTokenGen(JWTGen(issuer, key), client, user, repository),
         _client = client;
 
   factory GithubAPI(
           String repository, String user, String issuer, RSAPrivateKey key,
-          {HttpClient client}) =>
-      GithubAPI._(repository, user, issuer, key, client ?? HttpClient());
+          {HttpClient client, bool verbose}) =>
+      GithubAPI._(repository, user, issuer, key, client ?? HttpClient(), verbose);
 
   Future<Map<String, dynamic>> fetchLatestRelease(String repository) async {
+    if(verbose){
+      print('Starting release fetch');
+    }
     var request = await _client.getUrl(Uri(
         scheme: 'https',
         host: 'api.github.com',
@@ -32,10 +36,16 @@ class GithubAPI {
     var body = await response
         .transform(Utf8Decoder())
         .fold<String>('', (previousValue, element) => previousValue + element);
+    if(verbose){
+      print('Ending release fetch');
+    }
     return json.decode(body);
   }
 
   Future<void> push(GitDir gitDir) async {
+    if(verbose){
+      print('Starting push');
+    }
     var token = await _authGen.produce();
     await gitDir.runCommand(['add', '--all']);
     await gitDir.runCommand(
@@ -45,9 +55,15 @@ class GithubAPI {
       'https://x-access-token:$token@github.com/$user/$repository',
       'master'
     ]);
+    if(verbose){
+      print('Ending push');
+    }
   }
 
   Future<GitDir> clone(String directory) async {
+    if(verbose){
+      print('Starting clone');
+    }
     var result = await runGit(
         ['clone', 'https://github.com/$user/$repository', directory]);
     if (result.exitCode != 0) {
@@ -56,16 +72,26 @@ class GithubAPI {
       throw result.stderr;
     }
 
+    if(verbose){
+      print('Ending clone');
+    }
+
     return GitDir.fromExisting(directory);
   }
 
   Future<List<int>> fetchAttachement(Uri uri) async {
+    if(verbose){
+      print('Starting attachement fetch');
+    }
     var request = await _client.getUrl(uri);
     var response = await request.close();
     var body = await response.fold(<int>[], (List<int> previous, element) {
       previous.addAll(element);
       return previous;
     });
+    if(verbose){
+      print('Ending attachement fetch');
+    }
     return body;
   }
 }

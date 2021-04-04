@@ -1,10 +1,17 @@
 import 'dart:io';
 
 class FDroid {
+  final bool verb;
+
+  FDroid({this.verb = false});
+
   Future<void> initRepository(
       {String workingDirectory,
       bool verbose = false,
       bool quite = false}) async {
+    if(verb){
+      print('Starting fdroid init');
+    }
     var options = ['init'];
     if (verbose) {
       options.add('-v');
@@ -20,6 +27,9 @@ class FDroid {
       print(res.stderr);
       throw res.stderr;
     }
+    if(verb){
+      print('Ending fdroid init');
+    }
   }
 
   Future<void> updateRepository(
@@ -34,6 +44,9 @@ class FDroid {
       bool nosign = false,
       bool renameApks = false,
       bool useDateFromApk = false}) async {
+    if(verb){
+      print('Starting fdroid update');
+    }
     var options = ['update'];
     if (createMeta) {
       options.add('--create-metadata');
@@ -72,6 +85,9 @@ class FDroid {
       print('An error happened while we were upgrading! Check the logs!');
       print(res.stderr);
       throw res.stderr;
+    }
+    if(verb){
+      print('Ending fdroid update');
     }
   }
 }
