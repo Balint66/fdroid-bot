@@ -65,7 +65,7 @@ class FDroidRepository {
 
   Future<void> updateRepository() async {
     await fDroid.updateRepository(
-        path: path, pretty: true, useDateFromApk: true, verbose: true);
+        path: path, pretty: true, useDateFromApk: true, verbose: true, nosign: true);
   }
 
   Future<void> pushUpdate() async {
