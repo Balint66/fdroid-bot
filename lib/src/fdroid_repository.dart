@@ -56,7 +56,7 @@ class FDroidRepository {
     {
       await idFile.create();
     }
-    await idFile.writeAsString(release['id']);
+    await idFile.writeAsString(release['id'].toString());
     if(verbose){
       print('Ending apk download');
     }
