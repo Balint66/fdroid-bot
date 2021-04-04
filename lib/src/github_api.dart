@@ -35,7 +35,7 @@ class GithubAPI {
     var response = await request.close();
     var body = await response
         .transform(Utf8Decoder())
-        .fold('', (String previousValue, element) => previousValue + element.toString());
+        .fold<String>('', (String previousValue, String element) => previousValue + element);
     if(verbose){
       print('Ending release fetch');
     }
