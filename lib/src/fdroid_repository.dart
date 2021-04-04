@@ -50,7 +50,12 @@ class FDroidRepository {
     }
     var data =
         await api.fetchAttachement(Uri.parse(asset['browser_download_url']));
+    await apk.create();
     await apk.writeAsBytes(data);
+    if(!await idFile.exists())
+    {
+      await idFile.create();
+    }
     await idFile.writeAsString(release['id']);
     if(verbose){
       print('Ending apk download');
