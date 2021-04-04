@@ -75,6 +75,10 @@ class FDroidRepository {
   }
 
   Future<void> updateLoop() => Future.doWhile(() async {
+        if(verbose)
+        {
+          print('loop');
+        }
         await Future.delayed(Duration(minutes: 30));
         var downloaded = await getLatestApk();
         if (downloaded) {
