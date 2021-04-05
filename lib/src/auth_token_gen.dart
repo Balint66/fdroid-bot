@@ -27,7 +27,7 @@ class AuthTokenGen {
           .transform(Utf8Decoder())
           .fold<String>('', (p, c) => p + c);
       var body =
-          ((json.decode(bodys)) as List<dynamic>).cast<Map<String, dynamic>>();
+          (json.decode(bodys)).cast<Map<String, dynamic>>();
 
       //filter for the user
       body.removeWhere((item) =>
