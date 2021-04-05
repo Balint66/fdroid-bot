@@ -9,7 +9,7 @@ class FDroid {
       {String workingDirectory,
       bool verbose = false,
       bool quite = false}) async {
-    if(verb){
+    if (verb) {
       print('Starting fdroid init');
     }
     var options = ['init'];
@@ -27,7 +27,7 @@ class FDroid {
       print(res.stderr);
       throw res.stderr;
     }
-    if(verb){
+    if (verb) {
       print('Ending fdroid init');
     }
   }
@@ -44,7 +44,7 @@ class FDroid {
       bool nosign = false,
       bool renameApks = false,
       bool useDateFromApk = false}) async {
-    if(verb){
+    if (verb) {
       print('Starting fdroid update');
     }
     var options = ['update'];
@@ -86,7 +86,7 @@ class FDroid {
       print(res.stderr);
       throw res.stderr;
     }
-    if(verb){
+    if (verb) {
       print('Ending fdroid update');
     }
   }

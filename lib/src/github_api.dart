@@ -22,10 +22,11 @@ class GithubAPI {
   factory GithubAPI(
           String repository, String user, String issuer, RSAPrivateKey key,
           {HttpClient client, bool verbose}) =>
-      GithubAPI._(repository, user, issuer, key, client ?? HttpClient(), verbose);
+      GithubAPI._(
+          repository, user, issuer, key, client ?? HttpClient(), verbose);
 
   Future<Map<String, dynamic>> fetchLatestRelease(String repository) async {
-    if(verbose){
+    if (verbose) {
       print('Starting release fetch');
     }
     var request = await _client.getUrl(Uri(
@@ -33,17 +34,16 @@ class GithubAPI {
         host: 'api.github.com',
         path: 'repos/$repository/releases/latest'));
     var response = await request.close();
-    var body = await response
-        .transform(Utf8Decoder())
-        .fold<String>('', (String previousValue, String element) => previousValue + element);
-    if(verbose){
+    var body = await response.transform(Utf8Decoder()).fold<String>(
+        '', (String previousValue, String element) => previousValue + element);
+    if (verbose) {
       print('Ending release fetch');
     }
     return json.decode(body);
   }
 
   Future<void> push(GitDir gitDir) async {
-    if(verbose){
+    if (verbose) {
       print('Starting push');
     }
     var token = await _authGen.produce();
@@ -55,13 +55,13 @@ class GithubAPI {
       'https://x-access-token:$token@github.com/$user/$repository',
       'master'
     ]);
-    if(verbose){
+    if (verbose) {
       print('Ending push');
     }
   }
 
   Future<GitDir> clone(String directory) async {
-    if(verbose){
+    if (verbose) {
       print('Starting clone');
     }
     var result = await runGit(
@@ -72,7 +72,7 @@ class GithubAPI {
       throw result.stderr;
     }
 
-    if(verbose){
+    if (verbose) {
       print('Ending clone');
     }
 
@@ -80,16 +80,17 @@ class GithubAPI {
   }
 
   Future<List<int>> fetchAttachement(Uri uri) async {
-    if(verbose){
+    if (verbose) {
       print('Starting attachement fetch');
     }
     var request = await _client.getUrl(uri);
     var response = await request.close();
-    var body = await response.fold<List<int>>(<int>[], (List<int> previous, List<int> element) {
+    var body = await response.fold<List<int>>(<int>[],
+        (List<int> previous, List<int> element) {
       previous.addAll(element);
       return previous;
     });
-    if(verbose){
+    if (verbose) {
       print('Ending attachement fetch');
     }
     return body;

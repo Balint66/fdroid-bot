@@ -11,10 +11,12 @@ class FDroidRepository {
   final GithubAPI api;
   final bool verbose;
 
-  FDroidRepository(this.path, this.releaseRepository, this.api, {this.verbose= false}): fDroid = FDroid(verb: verbose);
+  FDroidRepository(this.path, this.releaseRepository, this.api,
+      {this.verbose = false})
+      : fDroid = FDroid(verb: verbose);
 
   Future<void> initRepository() async {
-    if(verbose){
+    if (verbose) {
       print('Starting init');
     }
     var repoDirectory = Directory('$path/repo');
@@ -27,13 +29,13 @@ class FDroidRepository {
         await api.clone(path);
       }
     }
-    if(verbose){
+    if (verbose) {
       print('Ending init');
     }
   }
 
   Future<bool> getLatestApk() async {
-    if(verbose){
+    if (verbose) {
       print('Starting apk download');
     }
     var release = await api.fetchLatestRelease(releaseRepository);
@@ -43,21 +45,20 @@ class FDroidRepository {
     var id = await idFile.exists() ? await idFile.readAsString() : null;
     var apk = File('$path/repo/$name');
     if (await apk.exists() && id == release['id']) {
-      if(verbose){
-      print('error while downloading');
-    }
+      if (verbose) {
+        print('error while downloading');
+      }
       return false;
     }
     var data =
         await api.fetchAttachement(Uri.parse(asset['browser_download_url']));
     await apk.create();
     await apk.writeAsBytes(data);
-    if(!await idFile.exists())
-    {
+    if (!await idFile.exists()) {
       await idFile.create();
     }
     await idFile.writeAsString(release['id'].toString());
-    if(verbose){
+    if (verbose) {
       print('Ending apk download');
     }
     return true;
@@ -65,23 +66,26 @@ class FDroidRepository {
 
   Future<void> updateRepository() async {
     await fDroid.updateRepository(
-        path: path, pretty: true, useDateFromApk: true, verbose: true, nosign: true);
+        path: path,
+        pretty: true,
+        useDateFromApk: true,
+        verbose: true,
+        nosign: true);
   }
 
   Future<void> pushUpdate() async {
-    if(verbose){
+    if (verbose) {
       print('Starting update');
     }
     var gitDir = await GitDir.fromExisting(path);
     await api.push(gitDir);
-    if(verbose){
+    if (verbose) {
       print('Ending update');
     }
   }
 
   Future<void> updateLoop() => Future.doWhile(() async {
-        if(verbose)
-        {
+        if (verbose) {
           print('loop');
         }
         var downloaded = await getLatestApk();

@@ -30,15 +30,12 @@ class AuthTokenGen {
 
       List<Map<String, dynamic>> body;
 
-      if(bodyj is List<Map<String, dynamic>>){
+      if (bodyj is List<Map<String, dynamic>>) {
         body.addAll(bodyj);
-      }
-      else if(bodyj is Map<String, dynamic>){
+      } else if (bodyj is Map<String, dynamic>) {
         body = [bodyj];
-      }
-      else
-      {
-        throw 'THE RESPONSE WAS INVALID! MAYVE THE API CHANGED?';
+      } else {
+        throw 'THE RESPONSE WAS INVALID! MAYBE THE API CHANGED?';
       }
 
       //filter for the user
@@ -46,6 +43,9 @@ class AuthTokenGen {
           item['account'] == null ||
           item['account']['url'] == null ||
           !(item['account']['url'].toString()).contains(_user));
+      if (body.isEmpty) {
+        throw 'THERE IS NO ASSOCIATED USER WITH THE ISSUER!';
+      }
       var url = body.first['access_tokens_url'] as String;
 
       //Now getting the installation token. This expires every hour. (POST must be used!)
