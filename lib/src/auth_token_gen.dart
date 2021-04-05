@@ -44,7 +44,7 @@ class AuthTokenGen {
           item['account']['url'] == null ||
           !(item['account']['url'].toString()).contains(_user));
       if (body.isEmpty) {
-        throw 'THERE IS NO ASSOCIATED USER WITH THE ISSUER!';
+        throw 'THERE IS NO ASSOCIATED USER WITH THE ISSUER! MAYBE THE BOT IS NOT INSTALLED?';
       }
       var url = body.first['access_tokens_url'] as String;
 
@@ -58,8 +58,6 @@ class AuthTokenGen {
         'repositories': <String>[_repo]
       }));
 
-      //TODO: test for errors, becuse the repo is not connected to the installation
-
       //Get response for the token
       response = await request.close();
       bodys = await response
@@ -67,7 +65,12 @@ class AuthTokenGen {
           .fold<String>('', (p, c) => p + c);
 
       //Setup the token and the timer
-      _token = json.decode(bodys)['token'];
+      bodyj = json.decode(bodys);
+      if (!bodyj['repositories'] is List<Map<String, dynamic>> ||
+          (bodyj['repositories'] as List<Map<String, dynamic>>).isEmpty) {
+        throw 'THE BOT DOES NOT HAVE PERMISSION FOR THE REPOSITORY!';
+      }
+      _token = bodyj['token'];
       _timer = Timer(Duration(hours: 1), () {
         _token = null;
       });
