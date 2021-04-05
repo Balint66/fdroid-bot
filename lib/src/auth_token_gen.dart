@@ -26,8 +26,20 @@ class AuthTokenGen {
       var bodys = await response
           .transform(Utf8Decoder())
           .fold<String>('', (p, c) => p + c);
-      var body =
-          (json.decode(bodys)).cast<Map<String, dynamic>>();
+      var bodyj = json.decode(bodys);
+
+      List<Map<String, dynamic>> body;
+
+      if(bodyj is List<Map<String, dynamic>>){
+        body.addAll(bodyj);
+      }
+      else if(bodyj is Map<String, dynamic>){
+        body = [bodyj];
+      }
+      else
+      {
+        throw 'THE RESPONSE WAS INVALID! MAYVE THE API CHANGED?';
+      }
 
       //filter for the user
       body.removeWhere((item) =>
